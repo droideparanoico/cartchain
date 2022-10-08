@@ -19,10 +19,35 @@ public class Blockchain {
     }
 
     public Boolean replace(List<Block> blockchainList) {
-        return true;
+        if (blockchainList.isEmpty()) {
+            return false;
+        }
+        if (blockchainList.size() < this.blockchainList.size()) {
+            return false;
+        }
+        List<Block> newBlockchainList = blockchainList.subList(0, this.blockchainList.size());
+        if (!newBlockchainList.equals(this.blockchainList)) {
+            return false;
+        }
+        return isValid(blockchainList);
     }
 
     public Boolean isValid(List<Block> blockchainList) {
-        return true;
+        boolean valid = true;
+        // Validate genesis block
+        if (!blockchainList.get(0).getPreviousHash().equals("")) {
+            return false;
+        }
+        // Validate every element's last hash value matches previous block's hash
+        for (int i = 0; i < blockchainList.size() - 1; i++) {
+            valid = blockchainList.get(i).getHash().equals(blockchainList.get(i + 1).getPreviousHash());
+            if (!valid) return false;
+        }
+        // Validate data hasn't been tampered
+        for (Block block : blockchainList) {
+            valid = block.getHash().equals(Block.generateHashFromBlock(block));
+            if (!valid) break;
+        }
+        return valid;
     }
 }

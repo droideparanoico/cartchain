@@ -23,7 +23,6 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class CartDatabaseAdapterTest {
-
     @Autowired
     private CartDatabaseAdapter cartDatabaseAdapter;
     @Mock

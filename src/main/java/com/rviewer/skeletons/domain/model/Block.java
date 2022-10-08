@@ -2,40 +2,37 @@ package com.rviewer.skeletons.domain.model;
 
 import com.rviewer.skeletons.domain.exception.HashGenerationException;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.With;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
-import java.util.Random;
 
 @Data
 @AllArgsConstructor
-@With
+@Builder
 public class Block {
-    private LocalDateTime timestamp;
-    private String lasthash;
+    @Builder.Default
+    private LocalDateTime timestamp = LocalDateTime.now();
+    private String previousHash;
     private String data;
-    private Integer nonce;
+    @Builder.Default
+    private Integer nonce = RandomNonce.getRandomNonce();
     private String hash;
 
-    public Block() {
-        this.timestamp = LocalDateTime.now();
-        this.nonce = new Random().nextInt();
-        this.hash = generateHashFromBlock(this);
-    }
-
     public static Block getGenesisBlock() {
-        return new Block().withLasthash("");
+        Block genesisBlock = Block.builder().previousHash("").build();
+        genesisBlock.setHash(generateHashFromBlock(genesisBlock));
+        return genesisBlock;
     }
 
-    static String generateHashFromBlock(final Block block) throws HashGenerationException {
+    public static String generateHashFromBlock(final Block block) throws HashGenerationException {
         try {
             final var digest = MessageDigest.getInstance("SHA-256");
-            final byte[] hash = digest.digest(block.getHashData().getBytes(StandardCharsets.UTF_8));
+            final byte[] hashData = digest.digest(block.getHashData().getBytes(StandardCharsets.UTF_8));
             final var hexString = new StringBuilder();
-            for (final byte elem : hash) {
+            for (final byte elem : hashData) {
                 final var hex = Integer.toHexString(0xff & elem);
                 if (hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
@@ -46,7 +43,11 @@ public class Block {
         }
     }
 
+    public void generateHash() {
+        hash = generateHashFromBlock(this);
+    }
+
     private String getHashData() {
-        return timestamp + lasthash + data + nonce;
+        return timestamp + previousHash + data + nonce;
     }
 }

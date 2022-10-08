@@ -30,17 +30,21 @@ public class CartService implements CartServicePort {
     public void save(Cart cart) {
         cartDatabasePort.save(cart);
         if (blockchain.getBlockchainList().isEmpty()) {
-            blockchain.addBlock(Block.getGenesisBlock().withData(cart.toString()));
+            blockchain.addBlock(Block.builder().data(cart.toString()).build());
         } else {
-            blockchain.addBlock(new Block().withData(cart.toString())
-                    .withLasthash(blockchain.getBlockchainList().getLast().getHash()));
+            Block saveBlock = Block.builder().data(cart.toString())
+                    .previousHash(blockchain.getBlockchainList().getLast().getHash()).build();
+            saveBlock.generateHash();
+            blockchain.addBlock(saveBlock);
         }
     }
 
     @Override
     public void delete(String id) {
         cartDatabasePort.delete(id);
-        blockchain.addBlock(new Block().withData("deleted cart with id:" + id)
-                .withLasthash(blockchain.getBlockchainList().getLast().getHash()));
+        Block deleteBlock = Block.builder().data("deleted cart with id:" + id)
+                .previousHash(blockchain.getBlockchainList().getLast().getHash()).build();
+        deleteBlock.generateHash();
+        blockchain.addBlock(deleteBlock);
     }
 }
