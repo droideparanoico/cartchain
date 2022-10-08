@@ -1,6 +1,6 @@
 # CartChain
 
-Proof of concept for an e-commerce API implementing blockchain technology by using a simple private chain (no mining)
+Proof of concept for an e-commerce API implementing blockchain technology by using a simple private chain.
 
 ## How it works?
 
@@ -72,5 +72,5 @@ Within the [Makefile](Makefile) you can handle the entire flow to get everything
 
 Go to [localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) to see the API description.
 
-As you can see on the [Makefile](Makefile) script and the [docker-Compose File](docker-compose.yml), the whole API
+As you can see on the [Makefile](Makefile) script and the [docker-compose file](docker-compose.yml), the whole API
 is containerized with docker and the API is using the internal DNS to connect with the PostgreSQL instance.
