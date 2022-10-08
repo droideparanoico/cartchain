@@ -1,37 +1,40 @@
 version: '3.9'
 
 services:
-    java-skeleton-api:
-        container_name: java-skeleton-api
-        image: gradle:latest # this is due to some Mac M1 issues with Docker :_
-        depends_on:
-            -   postgres-skeleton-db
-        volumes:
-            -   "${PWD}:/home/gradle/project"
-            -   "rv-gradle-cache:/home/gradle/.gradle"
-        working_dir: "/home/gradle/project"
-        ports:
-            -   "8080:8080"
-        networks:
-            internal-net:
+  java-cartchain-api:
+    container_name: java-cartchain-api
+    image: gradle:latest # this is due to some Mac M1 issues with Docker :_
+    depends_on:
+      - postgres-cartchain-db
+    volumes:
+      - "${PWD}:/home/gradle/project"
+      - "gradle-cache:/home/gradle/.gradle"
+    working_dir: "/home/gradle/project"
+    ports:
+      - "8080:8080"
+    networks:
+      internal-net:
 
-    postgres-skeleton-db:
-        container_name: postgres-skeleton-db
-        image: postgres:13.4-alpine
-        restart: on-failure
-        volumes:
-            - rv-volume:/var/lib/postgresql/data
-        ports:
-            - "5432:5432"
-        env_file:
-            - postgres.dev.env
-        networks:
-            internal-net:
+  postgres-cartchain-db:
+    container_name: postgres-cartchain-db
+    image: postgres:13.4-alpine
+    restart: on-failure
+    volumes:
+      - volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_NAME=postgres-cartchain-db
+      - POSTGRES_DB=postgres_database
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    networks:
+      internal-net:
 
 volumes:
-    rv-volume:
-    rv-gradle-cache:
+  volume:
+  gradle-cache:
 
 networks:
-    internal-net:
-        name: rv-skeleton-net
+  internal-net:
+    name: cartchain-net

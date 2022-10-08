@@ -4,9 +4,9 @@ down:
 	docker-compose down
 
 up:
-	docker-compose run -d -p "8080:8080" java-skeleton-api gradle clean build bootRun -x test
+	docker-compose run -d -p "8080:8080" java-cartchain-api gradle clean build bootRun -x test
 
 test:
-	docker-compose run --rm --no-deps -p "8080:8080" java-skeleton-api gradle test
+	docker-compose run --rm --no-deps -p "8080:8080" java-cartchain-api gradle test
 
 coverage: test
