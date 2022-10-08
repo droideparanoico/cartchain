@@ -3,8 +3,8 @@ package com.rviewer.skeletons.domain.service;
 import com.rviewer.skeletons.domain.model.Block;
 import com.rviewer.skeletons.domain.model.Blockchain;
 import com.rviewer.skeletons.domain.model.Cart;
-import com.rviewer.skeletons.domain.ports.primary.CartServicePort;
-import com.rviewer.skeletons.domain.ports.secondary.CartDatabasePort;
+import com.rviewer.skeletons.domain.ports.inbound.CartServicePort;
+import com.rviewer.skeletons.domain.ports.outbound.CartDatabasePort;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;

@@ -4,7 +4,7 @@ import com.rviewer.skeletons.application.exception.CartAlreadyExistsException;
 import com.rviewer.skeletons.application.exception.CartNotFoundException;
 import com.rviewer.skeletons.domain.model.Cart;
 import com.rviewer.skeletons.domain.model.Item;
-import com.rviewer.skeletons.domain.ports.primary.CartServicePort;
+import com.rviewer.skeletons.domain.ports.inbound.CartServicePort;
 import com.rviewer.skeletons.application.request.CreateCartReq;
 import com.rviewer.skeletons.application.request.UpdateCartReq;
 import org.springframework.http.HttpStatus;

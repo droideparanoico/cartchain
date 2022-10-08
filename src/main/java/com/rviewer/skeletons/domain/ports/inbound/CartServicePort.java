@@ -1,11 +1,10 @@
-package com.rviewer.skeletons.domain.ports.secondary;
+package com.rviewer.skeletons.domain.ports.inbound;
 
 import com.rviewer.skeletons.domain.model.Cart;
 
 import java.util.Optional;
 
-public interface CartDatabasePort {
-
+public interface CartServicePort {
     Optional<Cart> get(String id);
     void save(Cart cart);
     void delete(String id);

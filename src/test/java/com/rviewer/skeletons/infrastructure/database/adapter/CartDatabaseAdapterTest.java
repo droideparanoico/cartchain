@@ -1,8 +1,7 @@
-package com.rviewer.skeletons.infrastructure.outbound.adapter;
+package com.rviewer.skeletons.infrastructure.database.adapter;
 
 import com.rviewer.skeletons.domain.model.Cart;
 import com.rviewer.skeletons.domain.model.Item;
-import com.rviewer.skeletons.infrastructure.database.adapter.CartDatabaseAdapter;
 import com.rviewer.skeletons.infrastructure.database.dto.PostgresCart;
 import com.rviewer.skeletons.infrastructure.database.repository.PostgresCartRepository;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,9 +1,9 @@
-package com.rviewer.skeletons.infrastructure.inbound.api.adapter;
+package com.rviewer.skeletons.application.adapter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rviewer.skeletons.domain.model.Cart;
 import com.rviewer.skeletons.domain.model.Item;
-import com.rviewer.skeletons.domain.ports.primary.CartServicePort;
+import com.rviewer.skeletons.domain.ports.inbound.CartServicePort;
 import com.rviewer.skeletons.application.exception.CartAlreadyExistsException;
 import com.rviewer.skeletons.application.exception.CartNotFoundException;
 import org.junit.jupiter.api.Test;
