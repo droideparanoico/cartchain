@@ -3,7 +3,7 @@ package com.rviewer.skeletons.infrastructure.inbound.api.adapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rviewer.skeletons.domain.model.Cart;
 import com.rviewer.skeletons.domain.model.Item;
-import com.rviewer.skeletons.domain.service.CartService;
+import com.rviewer.skeletons.domain.ports.primary.CartServicePort;
 import com.rviewer.skeletons.application.exception.CartAlreadyExistsException;
 import com.rviewer.skeletons.application.exception.CartNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class CartControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private CartService cartService;
+    private CartServicePort cartServicePort;
 
     @Test
     void should_return_cart() throws Exception {
@@ -43,7 +43,7 @@ class CartControllerTest {
         Item item = new Item(UUID.randomUUID(), "item", 1, 100F);
         Cart expectedCart = new Cart(id, List.of(item));
 
-        when(cartService.get(id.toString())).thenReturn(Optional.of(expectedCart));
+        when(cartServicePort.get(id.toString())).thenReturn(Optional.of(expectedCart));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/carts/" + id))
                 .andExpect(status().isOk())
@@ -58,7 +58,7 @@ class CartControllerTest {
     void should_not_return_non_existing_cart() throws Exception {
         UUID id = UUID.randomUUID();
 
-        when(cartService.get(id.toString())).thenReturn(Optional.empty());
+        when(cartServicePort.get(id.toString())).thenReturn(Optional.empty());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/carts/" + id))
                 .andExpect(status().isNotFound())
@@ -83,7 +83,7 @@ class CartControllerTest {
         Item item = new Item(UUID.randomUUID(), "item", 1, 100F);
         Cart oldCart = new Cart(id, List.of(item));
 
-        when(cartService.get(id.toString())).thenReturn(Optional.of(oldCart));
+        when(cartServicePort.get(id.toString())).thenReturn(Optional.of(oldCart));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/carts/" + id)
                         .content(asJsonString(oldCart))
@@ -126,13 +126,13 @@ class CartControllerTest {
         Item item = new Item(UUID.randomUUID(), "item", 1, 100F);
         Cart oldCart = new Cart(id, List.of(item));
 
-        when(cartService.get(id.toString())).thenReturn(Optional.of(oldCart));
+        when(cartServicePort.get(id.toString())).thenReturn(Optional.of(oldCart));
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/carts/" + id)
                         .content(asJsonString(oldCart).replace("100.0", "1000.0"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(result -> assertEquals(1000F, cartService.get(id.toString()).orElseThrow().getItems().get(0).getPrice()));
+                .andExpect(result -> assertEquals(1000F, cartServicePort.get(id.toString()).orElseThrow().getItems().get(0).getPrice()));
     }
 
     @Test
@@ -141,7 +141,7 @@ class CartControllerTest {
         Item item = new Item(UUID.randomUUID(), "item", 1, 100F);
         Cart nonExistingCart = new Cart(id, List.of(item));
 
-        when(cartService.get(id.toString())).thenReturn(Optional.empty());
+        when(cartServicePort.get(id.toString())).thenReturn(Optional.empty());
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/carts/" + id)
                 .content(asJsonString(nonExistingCart))
@@ -184,7 +184,7 @@ class CartControllerTest {
         Item item = new Item(UUID.randomUUID(), "item", 1, 100F);
         Cart oldCart = new Cart(id, List.of(item));
 
-        when(cartService.get(id.toString())).thenReturn(Optional.of(oldCart));
+        when(cartServicePort.get(id.toString())).thenReturn(Optional.of(oldCart));
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/carts/" + id)
                         .content(asJsonString(oldCart))
@@ -198,7 +198,7 @@ class CartControllerTest {
         Item item = new Item(UUID.randomUUID(), "item", 1, 100F);
         Cart nonExistingCart = new Cart(id, List.of(item));
 
-        when(cartService.get(id.toString())).thenReturn(Optional.empty());
+        when(cartServicePort.get(id.toString())).thenReturn(Optional.empty());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/carts/" + id)
                         .content(asJsonString(nonExistingCart))

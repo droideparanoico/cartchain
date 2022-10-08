@@ -4,7 +4,7 @@ import com.rviewer.skeletons.application.exception.CartAlreadyExistsException;
 import com.rviewer.skeletons.application.exception.CartNotFoundException;
 import com.rviewer.skeletons.domain.model.Cart;
 import com.rviewer.skeletons.domain.model.Item;
-import com.rviewer.skeletons.domain.service.CartService;
+import com.rviewer.skeletons.domain.ports.primary.CartServicePort;
 import com.rviewer.skeletons.application.request.CreateCartReq;
 import com.rviewer.skeletons.application.request.UpdateCartReq;
 import org.springframework.http.HttpStatus;
@@ -25,23 +25,23 @@ import java.util.UUID;
 @RequestMapping("/carts")
 public class CartController {
 
-    private final CartService cartService;
+    private final CartServicePort cartServicePort;
 
-    public CartController(CartService cartService) {
-        this.cartService = cartService;
+    public CartController(CartServicePort cartServicePort) {
+        this.cartServicePort = cartServicePort;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Cart> getCart(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(cartService.get(id).orElseThrow(CartNotFoundException::new));
+        return ResponseEntity.status(HttpStatus.OK).body(cartServicePort.get(id).orElseThrow(CartNotFoundException::new));
     }
 
     @PostMapping("/{id}")
     public ResponseEntity<HttpStatus> saveCart(@PathVariable String id, @Valid @RequestBody CreateCartReq createCartReq) {
-        if (cartService.get(id).isPresent()) {
+        if (cartServicePort.get(id).isPresent()) {
             throw new CartAlreadyExistsException();
         } else {
-            cartService.save(new Cart(UUID.fromString(id), createCartReq.getItems()
+            cartServicePort.save(new Cart(UUID.fromString(id), createCartReq.getItems()
                     .stream()
                     .map(item -> new Item(item.getId(), item.getName(), item.getQuantity(), item.getPrice()))
                     .toList()));
@@ -51,18 +51,18 @@ public class CartController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> updateCart(@PathVariable String id, @Valid @RequestBody UpdateCartReq updateCartReq) {
-        Cart cart = cartService.get(id).orElseThrow(CartNotFoundException::new);
+        Cart cart = cartServicePort.get(id).orElseThrow(CartNotFoundException::new);
         cart.setItems(updateCartReq.getItems());
-        cartService.save(cart);
+        cartServicePort.save(cart);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteCart(@PathVariable String id) {
-        if (cartService.get(id).isEmpty()) {
+        if (cartServicePort.get(id).isEmpty()) {
             throw new CartNotFoundException();
         } else {
-            cartService.delete(id);
+            cartServicePort.delete(id);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
     }
