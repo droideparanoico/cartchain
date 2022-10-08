@@ -1,6 +1,6 @@
-package com.rviewer.skeletons.infrastructure.outbound.database.repository;
+package com.rviewer.skeletons.infrastructure.database.repository;
 
-import com.rviewer.skeletons.infrastructure.outbound.database.dto.PostgresCart;
+import com.rviewer.skeletons.infrastructure.database.dto.PostgresCart;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

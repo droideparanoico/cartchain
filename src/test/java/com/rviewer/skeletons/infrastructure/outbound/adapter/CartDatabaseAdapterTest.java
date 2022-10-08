@@ -2,9 +2,9 @@ package com.rviewer.skeletons.infrastructure.outbound.adapter;
 
 import com.rviewer.skeletons.domain.model.Cart;
 import com.rviewer.skeletons.domain.model.Item;
-import com.rviewer.skeletons.infrastructure.outbound.database.adapter.PostgresAdapter;
-import com.rviewer.skeletons.infrastructure.outbound.database.dto.PostgresCart;
-import com.rviewer.skeletons.infrastructure.outbound.database.repository.PostgresCartRepository;
+import com.rviewer.skeletons.infrastructure.database.adapter.CartDatabaseAdapter;
+import com.rviewer.skeletons.infrastructure.database.dto.PostgresCart;
+import com.rviewer.skeletons.infrastructure.database.repository.PostgresCartRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -23,16 +23,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class PostgresAdapterTest {
+class CartDatabaseAdapterTest {
 
     @Autowired
-    private PostgresAdapter postgresAdapter;
+    private CartDatabaseAdapter cartDatabaseAdapter;
     @Mock
     private PostgresCartRepository postgresCartRepository;
 
     @BeforeEach
     void init() {
-        postgresAdapter = new PostgresAdapter(postgresCartRepository);
+        cartDatabaseAdapter = new CartDatabaseAdapter(postgresCartRepository);
     }
 
     @Test
@@ -43,7 +43,7 @@ class PostgresAdapterTest {
 
         when(postgresCartRepository.findById(id)).thenReturn(Optional.ofNullable(PostgresCart.fromDomain(expectedCart)));
 
-        Optional<Cart> result = postgresAdapter.get(id.toString());
+        Optional<Cart> result = cartDatabaseAdapter.get(id.toString());
         assertThat(Optional.of(result)).hasValue(Optional.of(expectedCart));
     }
 
@@ -53,7 +53,7 @@ class PostgresAdapterTest {
         Item item = new Item(UUID.randomUUID(), "item", 1, 100F);
         Cart newCart = new Cart(id, List.of(item));
 
-        postgresAdapter.save(newCart);
+        cartDatabaseAdapter.save(newCart);
 
         ArgumentCaptor<PostgresCart> captor = ArgumentCaptor.forClass(PostgresCart.class);
         verify(postgresCartRepository).save(captor.capture());
@@ -68,7 +68,7 @@ class PostgresAdapterTest {
 
         when(postgresCartRepository.findById(id)).thenReturn(Optional.ofNullable(PostgresCart.fromDomain(cartToDelete)));
 
-        postgresAdapter.delete(cartToDelete.getId().toString());
+        cartDatabaseAdapter.delete(cartToDelete.getId().toString());
 
         verify(postgresCartRepository, times(1)).deleteById(cartToDelete.getId());
     }

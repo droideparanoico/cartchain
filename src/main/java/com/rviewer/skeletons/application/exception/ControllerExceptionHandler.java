@@ -1,4 +1,4 @@
-package com.rviewer.skeletons.infrastructure.inbound.api.exception;
+package com.rviewer.skeletons.application.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

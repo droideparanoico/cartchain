@@ -1,4 +1,4 @@
-package com.rviewer.skeletons.infrastructure.outbound.database.dto;
+package com.rviewer.skeletons.infrastructure.database.dto;
 
 import com.rviewer.skeletons.domain.model.Item;
 import lombok.AllArgsConstructor;

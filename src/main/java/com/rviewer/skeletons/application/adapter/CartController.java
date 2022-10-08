@@ -1,12 +1,12 @@
-package com.rviewer.skeletons.infrastructure.inbound.api.adapter;
+package com.rviewer.skeletons.application.adapter;
 
+import com.rviewer.skeletons.application.exception.CartAlreadyExistsException;
+import com.rviewer.skeletons.application.exception.CartNotFoundException;
 import com.rviewer.skeletons.domain.model.Cart;
 import com.rviewer.skeletons.domain.model.Item;
 import com.rviewer.skeletons.domain.service.CartService;
-import com.rviewer.skeletons.infrastructure.inbound.api.exception.CartAlreadyExistsException;
-import com.rviewer.skeletons.infrastructure.inbound.api.exception.CartNotFoundException;
-import com.rviewer.skeletons.infrastructure.inbound.api.request.CreateCartReq;
-import com.rviewer.skeletons.infrastructure.inbound.api.request.UpdateCartReq;
+import com.rviewer.skeletons.application.request.CreateCartReq;
+import com.rviewer.skeletons.application.request.UpdateCartReq;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
